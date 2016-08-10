@@ -83,7 +83,7 @@ class InkBot:
             traceback.print_exc()
             print("Inkbot had an Error: {}, going to try and continue".format(e))
         self.PostList.close()
-        sleep(self.wait_time)
+        time.sleep(self.wait_time)
         self.start()
         exit()
 
