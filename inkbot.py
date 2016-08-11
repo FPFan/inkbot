@@ -143,7 +143,7 @@ class InkBot:
                           # Build up the regex, pulled from the Airtable
                           temp_reg='\[\[' + ink['fields']['Brand+ink regex'] + '\]\]'
                           # Build up the replacement string from Airtable
-                          temp_replace='*  [This is ' + ink['fields']['Name'] + '](' + ink['fields']['Imgur Address'] + ')   \n'
+                          temp_replace='*  [' + ink['fields']['Name'] + '](' + ink['fields']['Imgur Address'] + ')   \n'
                           # will enter this if statement if the specific match from the comment matches this Airtable entry
                           if re.search(temp_reg, match, flags=re.IGNORECASE):
                               found_match = 1 
