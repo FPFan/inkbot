@@ -23,6 +23,8 @@ class InkBot:
                  user_agent,
                  user_name,
                  user_pass,
+                 client_id,
+                 client_secret,
                  subreddit,
                  at_key,
                  at_base,
@@ -36,16 +38,19 @@ class InkBot:
         if self.debug:
             print("Setting up Inkbot....")
 
-        self.user_agent = user_agent
-        self.user_name  = user_name
-        self.user_pass  = user_pass
-        self.at_base    = at_base
-        self.at_key     = at_key
-        self.at_table   = at_table
-        self.subreddit  = subreddit
-        self.limit      = limit
-        self.wait_time  = wait_time
-        self.r = praw.Reddit(user_agent = self.user_agent)
+        self.user_agent    = user_agent
+        self.user_name     = user_name
+        self.user_pass     = user_pass
+        self.client_id     = client_id
+        self.client_secret = client_secret
+        self.at_base       = at_base
+        self.at_key        = at_key
+        self.at_table      = at_table
+        self.subreddit     = subreddit
+        self.limit         = limit
+        self.wait_time     = wait_time
+        # DELETE ME--Old methodology, keep for now, delete line next update
+        #self.r = praw.Reddit(user_agent = self.user_agent)
 
 
     # Start things up
@@ -71,7 +76,15 @@ class InkBot:
     # Login to Reddit
     def __login(self):
         try:
-            self.r.login(username=self.user_name, password=self.user_pass, disable_warning=True)
+            # DELETE ME--Old methodology, keep for now, delete line next update
+            #self.r.login(username=self.user_name, password=self.user_pass, disable_warning=True)
+            self.r = praw.Reddit(client_id = self.client_id,
+                                 client_secret = self.client_secret,
+                                 password = self.user_pass,
+                                 user_agent = self.user_agent,
+                                 username = self.user_name)
+            if self.debug:
+                print(self.r.user.me())
         except Exception as e:
             self.___handle_exception(e)
 
@@ -116,7 +129,7 @@ class InkBot:
             print("\n---------------------------------------------")
             print("%s" %(output))
             print("\n---------------------------------------------")
-        comment.reply(output)
+        #comment.reply(output)
         self.PostList[sid] = 1
         self.PostList.sync()
 
