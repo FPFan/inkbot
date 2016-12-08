@@ -129,7 +129,7 @@ class InkBot:
             print("\n---------------------------------------------")
             print("%s" %(output))
             print("\n---------------------------------------------")
-        #comment.reply(output)
+        comment.reply(output)
         self.PostList[sid] = 1
         self.PostList.sync()
 
@@ -183,7 +183,9 @@ class InkBot:
     def __inkbot_loop(self):
         try:
             # Start the comment stream for processesing
-            for self.comment in praw.helpers.comment_stream(self.r, self.subreddit, limit=self.limit):
+            # DELETE ME--Old methodology, keep for now, delete line next update
+            #for self.comment in praw.helpers.comment_stream(self.r, self.subreddit, limit=self.limit):
+            for self.comment in self.r.subreddit(self.subreddit).stream.comments():
                 self.__comment_action(self.comment)
         except (KeyboardInterrupt, SystemExit):
             if self.debug:
