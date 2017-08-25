@@ -22,6 +22,7 @@ myinkbot = InkBot( user_agent = user_agent,
                    at_base    = at_base,
                    at_table   = at_table,
                    subreddit  = subreddit,
-                   debug=True )
+                   version    = 4,
+                   debug=True )  
 
 myinkbot.start()
