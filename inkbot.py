@@ -31,6 +31,7 @@ class InkBot:
                  at_table,
                  limit=1000,
                  wait_time = 60,
+                 version = 4,
                  debug=False ):
 
         self.debug = debug
@@ -49,8 +50,7 @@ class InkBot:
         self.subreddit     = subreddit
         self.limit         = limit
         self.wait_time     = wait_time
-        # DELETE ME--Old methodology, keep for now, delete line next update
-        #self.r = praw.Reddit(user_agent = self.user_agent)
+        self.version       = version
 
 
     # Start things up
@@ -76,8 +76,6 @@ class InkBot:
     # Login to Reddit
     def __login(self):
         try:
-            # DELETE ME--Old methodology, keep for now, delete line next update
-            #self.r.login(username=self.user_name, password=self.user_pass, disable_warning=True)
             self.r = praw.Reddit(client_id = self.client_id,
                                  client_secret = self.client_secret,
                                  password = self.user_pass,
@@ -155,10 +153,20 @@ class InkBot:
                       for ink in atrecord:
                           # Build up the regex, pulled from the Airtable
                           temp_reg='\[\[' + ink['fields']['Brand+ink regex'] + '\]\]'
+                          #temp_url=ink['fields']['Scanned Page'].url()
+                          #print("%s" %(temp_url))
                           # Build up the replacement string from Airtable
-                          temp_replace='*  [' + ink['fields']['Name'] + '](' + ink['fields']['Imgur Address'] + ')   \n'
+                          if self.version == 4:
+                              if 'Scanned Page' in ink['fields']:
+                                  temp_replace='*  [' + ink['fields']['Name'] + '](' + ink['fields']['Scanned Page'][0]['url'] + ')   \n'
+                              else:
+                                  temp_replace='*  [' + ink['fields']['Name'] + '](' + ink['fields']['Imgur Address'] + ')   \n'
+                          else:
+                              temp_replace='*  [' + ink['fields']['Name'] + '](' + ink['fields']['Imgur Address'] + ')   \n'
                           # will enter this if statement if the specific match from the comment matches this Airtable entry
                           if re.search(temp_reg, match, flags=re.IGNORECASE):
+                              if self.debug:
+                                  print("Found Match")
                               found_match = 1 
                               new_match= re.sub(temp_reg, temp_replace, match, 0, flags=re.IGNORECASE)
                               output = output + new_match
